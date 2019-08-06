@@ -15,7 +15,7 @@
 //
 // To measure a TrueType font in ideal FUnit space, use scale equal to
 // font.FUnitsPerEm().
-package truetype // import "github.com/golang/freetype/truetype"
+package truetype // import "github.com/guilhermehubner/freetype/truetype"
 
 import (
 	"fmt"
@@ -345,7 +345,7 @@ func (f *Font) parseKern() error {
 		return UnsupportedError(fmt.Sprintf("kern coverage: 0x%04x", coverage))
 	}
 	f.nKern, offset = int(u16(f.kern, offset)), offset+2
-	if 6*f.nKern != length-14 {
+	if uint16(6*f.nKern) != uint16(length-14) || 6*f.nKern > len(f.kern)-18 {
 		return FormatError("bad kern table length")
 	}
 	return nil
